@@ -15,7 +15,9 @@
  */
 package com.example.wordsapp
 
+import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,49 +25,45 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wordsapp.databinding.ItemViewBinding
 
-/**
- * Adapter for the [RecyclerView] in [MainActivity].
- */
-class LetterAdapter :
-    RecyclerView.Adapter<LetterAdapter.LetterViewHolder>() {
-
-    // Generates a [CharRange] from 'A' to 'Z' and converts it to a list
+class LetterAdapter : RecyclerView.Adapter<LetterAdapter.LetterViewHolder>() {
+    private lateinit var binding: ItemViewBinding
+    // 'A'에서 'Z'까지 [CharRange]를 생성하고 목록으로 변환합니다.
     private val list = ('A').rangeTo('Z').toList()
 
-    /**
-     * Provides a reference for the views needed to display items in your list.
-     */
-    class LetterViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val button = view.findViewById<Button>(R.id.button_item)
+    class LetterViewHolder(private val binding: ItemViewBinding):
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Char) {
+            binding.buttonItem.text = item.toString()
+
+            binding.buttonItem.setOnClickListener {
+                val intent = Intent(binding.buttonItem.context, DetailActivity::class.java)
+                intent.putExtra("letter", binding.buttonItem.text.toString())
+                binding.buttonItem.context.startActivity(intent)
+            }
+        }
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LetterViewHolder {
+//        val layout = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
+//        layout.accessibilityDelegate = Accessibility
+//        return LetterViewHolder(layout)
+
+        binding = ItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return LetterViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: LetterViewHolder, position: Int) {
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    /**
-     * Creates new views with R.layout.item_view as its template
-     */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LetterViewHolder {
-        val layout = LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.item_view, parent, false)
-        // Setup custom accessibility delegate to set the text read
-        layout.accessibilityDelegate = Accessibility
-        return LetterViewHolder(layout)
-    }
-
-    /**
-     * Replaces the content of an existing view with new data
-     */
-    override fun onBindViewHolder(holder: LetterViewHolder, position: Int) {
-        val item = list.get(position)
-        holder.button.text = item.toString()
-    }
-
-    // Setup custom accessibility delegate to set the text read with
-    // an accessibility service
+    // 접근성 서비스로 읽을 텍스트를 설정하기 위해 사용자 지정 접근성 대리자를 설정합니다.
     companion object Accessibility : View.AccessibilityDelegate() {
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun onInitializeAccessibilityNodeInfo(
