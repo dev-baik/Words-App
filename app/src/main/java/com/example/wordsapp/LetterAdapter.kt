@@ -70,10 +70,9 @@ class LetterAdapter(val context: Context) : RecyclerView.Adapter<LetterAdapter.L
             info: AccessibilityNodeInfo
         ) {
             super.onInitializeAccessibilityNodeInfo(host, info)
-            // With `null` as the second argument to [AccessibilityAction], the
-            // accessibility service announces "double tap to activate".
-            // If a custom string is provided,
-            // it announces "double tap to <custom string>".
+            // 1. [AccessibilityAction]의 두 번째 인수로 'null'을 사용하면
+            // 접근성 서비스가 "활성화하려면 두 번 탭하세요"를 알립니다.
+            // 2. 사용자 지정 문자열이 제공되면 "<custom string>을 두 번 탭합니다."라고 알립니다.
             val customString = host.context?.getString(R.string.look_up_words)
             val customClick =
                 AccessibilityNodeInfo.AccessibilityAction(

@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.layout_menu, menu)
         val layoutButton = menu?.findItem(R.id.action_switch_layout)
         setIcon(layoutButton)
