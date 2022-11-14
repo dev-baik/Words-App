@@ -38,9 +38,9 @@ class LetterAdapter : RecyclerView.Adapter<LetterAdapter.LetterViewHolder>() {
             binding.buttonItem.text = item.toString()
 
             binding.buttonItem.setOnClickListener {
-                val intent = Intent(binding.buttonItem.context, DetailActivity::class.java)
+                val intent = Intent(binding.root.context, DetailActivity::class.java)
                 intent.putExtra("letter", binding.buttonItem.text.toString())
-                binding.buttonItem.context.startActivity(intent)
+                binding.root.context.startActivity(intent)
             }
         }
 
