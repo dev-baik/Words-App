@@ -15,32 +15,31 @@
  */
 package com.example.wordsapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordsapp.databinding.ItemViewBinding
 
-class LetterAdapter : RecyclerView.Adapter<LetterAdapter.LetterViewHolder>() {
+class LetterAdapter(val context: Context) : RecyclerView.Adapter<LetterAdapter.LetterViewHolder>() {
     private lateinit var binding: ItemViewBinding
     // 'A'에서 'Z'까지 [CharRange]를 생성하고 목록으로 변환합니다.
     private val list = ('A').rangeTo('Z').toList()
 
-    class LetterViewHolder(private val binding: ItemViewBinding):
+    inner class LetterViewHolder(private val binding: ItemViewBinding):
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Char) {
             binding.buttonItem.text = item.toString()
 
             binding.buttonItem.setOnClickListener {
-                val intent = Intent(binding.root.context, DetailActivity::class.java)
+                val intent = Intent(context, DetailActivity::class.java)
                 intent.putExtra(DetailActivity.LETTER, binding.buttonItem.text.toString())
-                binding.root.context.startActivity(intent)
+                context.startActivity(intent)
             }
         }
 
